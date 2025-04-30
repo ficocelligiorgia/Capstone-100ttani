@@ -169,9 +169,10 @@ function Profile({ onNotify, theme }) {
                   color: theme.color,
                   padding: "1rem",
                   marginBottom: "2rem",
-                  borderRadius: "10px",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                  maxWidth: "500px",
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                  maxWidth: "600px",
+                  marginInline: "auto"
                 }}
               >
                 {m.fileType === "image" ? (
@@ -179,11 +180,11 @@ function Profile({ onNotify, theme }) {
                 ) : (
                   <video controls src={`http://localhost:5000${m.fileUrl}`} style={imageStyle} />
                 )}
-                <h4>{m.title}</h4>
-                <button onClick={() => handleLike(m._id)} style={{ background: "none", border: "none", color: theme.color }}>
+                <h4 style={{ marginTop: "0.5rem" }}>{m.title}</h4>
+                <button onClick={() => handleLike(m._id)} style={{ background: "none", border: "none", color: theme.color, cursor: "pointer", marginTop: "0.5rem" }}>
                   ❤️ {m.likes?.length || 0} like
                 </button>
-                <div>
+                <div style={{ marginTop: "1rem" }}>
                   <input
                     type="text"
                     placeholder="Scrivi un commento..."
