@@ -4,11 +4,11 @@ const multer = require("multer");
 const Media = require("../models/media");
 const { verifyToken } = require("../middleware/auth");
 
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
   filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
 });
-
 const upload = multer({ storage: storage });
 
 
@@ -28,7 +28,6 @@ router.post("/", verifyToken, upload.single("file"), async (req, res) => {
     res.status(500).json({ message: "Errore durante l'upload", error: err });
   }
 });
-
 
 router.get("/", verifyToken, async (req, res) => {
   try {
@@ -50,7 +49,6 @@ router.post("/:id/like", verifyToken, async (req, res) => {
   if (!media) return res.status(404).json({ message: "Media non trovato" });
 
   const alreadyLiked = media.likes.includes(req.user.id);
-
   if (alreadyLiked) {
     media.likes.pull(req.user.id);
   } else {
@@ -93,7 +91,8 @@ router.delete("/:id", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "Media non trovato" });
     }
 
-    if (media.userId.toString() !== req.user.id) {
+    
+    if (media.userId.toString() !== req.user.id && req.user.role !== "admin") {
       return res.status(403).json({ message: "Non autorizzato" });
     }
 

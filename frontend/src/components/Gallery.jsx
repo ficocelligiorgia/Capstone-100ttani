@@ -35,19 +35,12 @@ function Gallery({ onNotify, theme, onAddPostClick }) {
   const fetchMedia = async () => {
     try {
       const res = await axios.get("http://localhost:5000/media", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setMediaList(res.data);
     } catch (error) {
-      if (error.code === 'ECONNREFUSED') {
-        console.error(" Connessione rifiutata. Assicurati che il server sia in esecuzione.");
-        onNotify(" Connessione rifiutata al server. Verifica che sia attivo.", "error");
-      } else {
-        console.error("Si è verificato un errore:", error.message);
-        onNotify(" Errore nel recupero dei media: " + error.message, "error");
-      }
+      console.error("Errore:", error.message);
+      onNotify("Errore nel recupero dei media", "error");
     } finally {
       setLoading(false);
     }
@@ -103,12 +96,12 @@ function Gallery({ onNotify, theme, onAddPostClick }) {
     <div
       key={media._id}
       style={{
-        backgroundColor: theme.cardBackground,
+        backgroundColor: "#fff",
         color: theme.color,
-        border: `1px solid ${theme.borderColor}`,
-        borderRadius: "10px",
+        borderRadius: "12px",
         overflow: "hidden",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+        padding: "1rem",
         marginBottom: "2rem",
       }}
     >
@@ -116,164 +109,186 @@ function Gallery({ onNotify, theme, onAddPostClick }) {
         <img
           src={`http://localhost:5000${media.fileUrl}`}
           alt={media.title}
-          style={{ width: "100%", maxHeight: "500px", objectFit: "cover" }}
+          style={{
+            width: "100%",
+            maxHeight: "500px",
+            objectFit: "cover",
+            borderRadius: "10px",
+          }}
         />
       ) : (
         <video
           controls
           src={`http://localhost:5000${media.fileUrl}`}
-          style={{ width: "100%", maxHeight: "500px", objectFit: "cover" }}
+          style={{
+            width: "100%",
+            maxHeight: "500px",
+            objectFit: "cover",
+            borderRadius: "10px",
+          }}
         />
       )}
 
-      <div style={{ padding: "1rem" }}>
-        <h4>{media.title || "Senza titolo"}</h4>
+      <h4 style={{ marginTop: "1rem", fontWeight: "600" }}>
+        {media.title || "Senza titolo"}
+      </h4>
 
-        <div style={{ marginTop: "0.5rem", marginBottom: "1rem" }}>
-          <button
-            onClick={() => handleLike(media._id)}
-            style={{
-              background: "none",
-              border: "none",
-              fontSize: "1.2rem",
-              cursor: "pointer",
-              color: theme.color,
-            }}
-          >
-            ❤️
-          </button>{" "}
-          {media.likes?.length || 0} like
-        </div>
+      <div style={{ margin: "0.5rem 0" }}>
+        <button
+          onClick={() => handleLike(media._id)}
+          style={{
+            background: "none",
+            border: "none",
+            fontSize: "1.2rem",
+            cursor: "pointer",
+            color: theme.color,
+          }}
+        >
+          ❤️
+        </button>{" "}
+        {media.likes?.length || 0} like
+      </div>
 
-        <div>
-          <input
-            type="text"
-            value={commentText[media._id] || ""}
-            onChange={(e) =>
-              setCommentText({
-                ...commentText,
-                [media._id]: e.target.value,
-              })
-            }
-            placeholder="Scrivi un commento..."
-            style={{
-              width: "100%",
-              padding: "0.5rem",
-              marginBottom: "0.5rem",
-              backgroundColor: theme.inputBackground,
-              color: theme.inputText,
-              border: `1px solid ${theme.borderColor}`,
-              borderRadius: "6px",
-            }}
-          />
-          <button
-            onClick={() => handleComment(media._id, commentText[media._id])}
-            style={{
-              padding: "0.4rem 1rem",
-              backgroundColor: theme.buttonBackground,
-              color: theme.buttonColor,
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-          >
-            Invia
-          </button>
-        </div>
+      <div style={{ marginBottom: "1rem" }}>
+        <input
+          type="text"
+          value={commentText[media._id] || ""}
+          onChange={(e) =>
+            setCommentText({ ...commentText, [media._id]: e.target.value })
+          }
+          placeholder="Scrivi un commento..."
+          style={{
+            width: "100%",
+            padding: "0.5rem",
+            backgroundColor: "#fff",
+            color: "#000",
+            border: `1px solid #ccc`,
+            borderRadius: "6px",
+            marginBottom: "0.5rem",
+          }}
+        />
+        <button
+          onClick={() => handleComment(media._id, commentText[media._id])}
+          style={{
+            padding: "0.4rem 1.2rem",
+            backgroundColor: "crimson",
+            color: "#fff",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          Invia
+        </button>
+      </div>
 
-        <div style={{ marginTop: "1rem" }}>
-          <h5>Commenti:</h5>
-          {media.comments && media.comments.length > 0 ? (
-            media.comments.map((c, index) => (
+      <div style={{ marginBottom: "1rem" }}>
+        <h5 style={{ marginBottom: "0.5rem" }}>Commenti:</h5>
+        {media.comments?.length > 0 ? (
+          media.comments.map((c, index) => (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                marginBottom: "0.75rem",
+              }}
+            >
               <div
-                key={index}
                 style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "50%",
+                  backgroundColor: "#888",
+                  color: "#fff",
                   display: "flex",
-                  alignItems: "flex-start",
-                  marginBottom: "0.8rem",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginRight: "0.75rem",
+                  fontWeight: "bold",
                 }}
               >
-                <div
-                  style={{
-                    width: "35px",
-                    height: "35px",
-                    borderRadius: "50%",
-                    backgroundColor: "#888",
-                    color: "#fff",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: "0.75rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {c.user?.username?.charAt(0).toUpperCase() || "?"}
-                </div>
-                <div>
-                  <strong>{c.user?.username || "Anonimo"}:</strong> {c.text}
-                  <div style={{ fontSize: "0.75rem", color: "#aaa" }}>
-                    {new Date(c.createdAt).toLocaleString("it-IT", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </div>
+                {c.user?.username?.charAt(0).toUpperCase() || "?"}
+              </div>
+              <div>
+                <strong>{c.user?.username || "Anonimo"}:</strong> {c.text}
+                <div style={{ fontSize: "0.75rem", color: "#aaa" }}>
+                  {new Date(c.createdAt).toLocaleString("it-IT", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                 </div>
               </div>
-            ))
-          ) : (
-            <p style={{ color: theme.color }}>Nessun commento ancora.</p>
-          )}
-        </div>
-
-        {user && media.userId && user.id === media.userId._id && (
-          <button
-            onClick={() => handleDelete(media._id)}
-            style={{
-              marginTop: "1rem",
-              backgroundColor: "crimson",
-              color: "white",
-              border: "none",
-              padding: "0.4rem 0.8rem",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-          >
-            Elimina
-          </button>
+            </div>
+          ))
+        ) : (
+          <p style={{ color: "#555", margin: 0 }}>Nessun commento ancora.</p>
         )}
       </div>
+
+      {user && media.userId && user.id === media.userId._id && (
+        <button
+          onClick={() => handleDelete(media._id)}
+          style={{
+            backgroundColor: "crimson",
+            color: "white",
+            border: "none",
+            padding: "0.4rem 0.8rem",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          Elimina
+        </button>
+      )}
+
+      {user && user.role === "admin" && (
+        <button
+          onClick={() => handleDelete(media._id)}
+          style={{
+            backgroundColor: "darkred",
+            color: "white",
+            border: "none",
+            padding: "0.4rem 0.8rem",
+            borderRadius: "6px",
+            cursor: "pointer",
+            marginLeft: "0.5rem",
+          }}
+        >
+          Elimina (Admin)
+        </button>
+      )}
     </div>
   );
 
   return (
-    <div style={{ padding: "2rem", color: theme.color }}>
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}>
+    <div style={{ padding: "2rem", color: theme.color, position: "relative" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+        <div></div>
         <button
           onClick={onAddPostClick}
+          title="Crea nuovo post"
           style={{
-            backgroundColor: theme.buttonBackground,
-            color: theme.buttonColor,
+            backgroundColor: "crimson",
+            color: "#fff",
             border: "none",
             borderRadius: "50%",
-            width: "42px",
-            height: "42px",
-            fontSize: "1.4rem",
+            width: "45px",
+            height: "45px",
+            fontSize: "1.2rem",
             display: "flex",
-            alignItems: "center",
             justifyContent: "center",
+            alignItems: "center",
             cursor: "pointer",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+            boxShadow: "0 4px 8px rgba(0,0,0,0.15)",
           }}
-          title="Aggiungi post"
         >
           <FaPlus />
         </button>
       </div>
-
-      
 
       {loading ? (
         <Spinner theme={theme} />
