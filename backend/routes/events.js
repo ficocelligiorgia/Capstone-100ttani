@@ -6,7 +6,6 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = path.join(__dirname, "../uploads");
@@ -24,13 +23,12 @@ const upload = multer({ storage });
 
 router.get("/", async (req, res) => {
   try {
-    const events = await Event.find().sort({ date: 1 });
+    const events = await Event.find().sort({ date: -1 });
     res.json(events);
   } catch (err) {
     res.status(500).json({ error: "Errore nel recupero eventi" });
   }
 });
-
 
 router.post(
   "/",
@@ -62,12 +60,11 @@ router.post(
       await newEvent.save();
       res.status(201).json(newEvent);
     } catch (err) {
-      console.error(" Errore nella creazione evento:", err);
+      console.error("Errore nella creazione evento:", err);
       res.status(500).json({ error: "Errore nella creazione evento" });
     }
   }
 );
-
 
 router.post("/:id/vote", async (req, res) => {
   try {
@@ -83,11 +80,10 @@ router.post("/:id/vote", async (req, res) => {
 
     res.json({ message: "Voto registrato con successo" });
   } catch (err) {
-    console.error(" Errore nella votazione:", err);
+    console.error("Errore nella votazione:", err);
     res.status(500).json({ error: "Errore nella votazione" });
   }
 });
-
 
 router.delete("/:id", verifyToken, authorizeRoles("admin", "staff"), async (req, res) => {
   try {
@@ -99,7 +95,7 @@ router.delete("/:id", verifyToken, authorizeRoles("admin", "staff"), async (req,
 
     res.json({ message: "Evento eliminato con successo" });
   } catch (err) {
-    console.error(" Errore nella cancellazione evento:", err);
+    console.error("Errore nella cancellazione evento:", err);
     res.status(500).json({ error: "Errore nella cancellazione evento" });
   }
 });
