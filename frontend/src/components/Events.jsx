@@ -105,30 +105,42 @@ function Events({ theme, token, userRole }) {
               </button>
             )}
 
-            <h2> {event.title || "Senza titolo"}</h2>
+            <h2>{event.title || "Senza titolo"}</h2>
 
-            <p>
-               {event.date ? new Date(event.date).toLocaleDateString("it-IT", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              }) : "Data non specificata"}
-            </p>
-
-            <p>
-              <i>{event.location || "Nessuna posizione"}</i>
-            </p>
-
-            {event.description && <p>{event.description}</p>}
-
-            {event.image && (
-              <img
-                src={`http://localhost:5000${event.image}`}
-                alt="Evento"
-                style={{ maxWidth: "100%", borderRadius: "6px", marginTop: "1rem" }}
-              />
-            )}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginTop: "1rem" }}>
+              {event.image && (
+                <div style={{ flex: "1 1 300px", display: "flex", justifyContent: "center" }}>
+                  <img
+                    src={`http://localhost:5000${event.image}`}
+                    alt="Evento"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "400px",
+                      height: "auto",
+                      width: "auto",
+                      objectFit: "contain",
+                      borderRadius: "10px",
+                    }}
+                  />
+                </div>
+              )}
+              <div style={{ flex: "2 1 400px" }}>
+                <p>
+                  {event.date
+                    ? new Date(event.date).toLocaleDateString("it-IT", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : "Data non specificata"}
+                </p>
+                <p>
+                  <i>{event.location || "Nessuna posizione"}</i>
+                </p>
+                {event.description && <p>{event.description}</p>}
+              </div>
+            </div>
 
             {event.coordinates?.lat && event.coordinates?.lng && (
               <div style={{ marginTop: "1rem" }}>
@@ -138,7 +150,7 @@ function Events({ theme, token, userRole }) {
 
             {event.poll?.question ? (
               <div style={{ marginTop: "1rem" }}>
-                <h4> {event.poll.question}</h4>
+                <h4>{event.poll.question}</h4>
                 <ul style={{ paddingLeft: "1rem" }}>
                   {event.poll.options.map((opt, i) => (
                     <li key={i} style={{ marginBottom: "0.5rem" }}>
