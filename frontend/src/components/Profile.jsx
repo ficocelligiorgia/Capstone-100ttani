@@ -223,7 +223,7 @@ function Profile({ onNotify, theme }) {
     <div style={{ display: "flex", backgroundColor: theme.background, color: theme.color }}>
       
       <div style={{ flex: 1, padding: "2rem", overflowY: "auto" }}>
-        <h2 style={{ marginBottom: "1rem" }}>I tuoi post</h2>
+        <h2 style={{ marginBottom: "1rem" }}>     </h2>
         {media.map((m) => (
           <div key={m._id} style={mediaCardStyle(theme)}>
             {m.fileType === "image" ? (
@@ -277,7 +277,7 @@ function Profile({ onNotify, theme }) {
             boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
             maxWidth: "500px",
           }}>
-            <h3>📍 {event.title}</h3>
+            <h3> {event.title}</h3>
             <p>{event.description}</p>
             <p><i>{event.location || "Posizione non specificata"}</i></p>
           </div>

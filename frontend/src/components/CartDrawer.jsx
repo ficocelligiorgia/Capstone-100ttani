@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { FaTimes, FaTrashAlt } from "react-icons/fa";
 import CheckoutPage from "./CheckoutPage";
-import { CartContext } from "./CartContext"; 
+import { CartContext } from "./CartContext";
 
 const CartDrawer = ({ isOpen, onClose, theme, isAuthenticated }) => {
   const [showCheckout, setShowCheckout] = useState(false);
-  const { cartItems, addToCart, removeFromCart } = useContext(CartContext); // usa il contesto
+  const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
 
   const handleQuantityChange = (productId, newQuantity) => {
     const item = cartItems.find((i) => i._id === productId);
@@ -53,7 +53,7 @@ const CartDrawer = ({ isOpen, onClose, theme, isAuthenticated }) => {
       ) : (
         <>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h2 style={{ margin: 0 }}>🛒 Carrello</h2>
+            <h2 style={{ margin: 0 }}> Carrello</h2>
             <button
               onClick={onClose}
               style={{
@@ -100,16 +100,26 @@ const CartDrawer = ({ isOpen, onClose, theme, isAuthenticated }) => {
                     <p style={{ margin: "0.3rem 0" }}>
                       {parseFloat(item.price).toFixed(2)} €
                     </p>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                      }}
+                    >
                       <button
-                        onClick={() => handleQuantityChange(item._id, item.quantity - 1)}
+                        onClick={() =>
+                          handleQuantityChange(item._id, item.quantity - 1)
+                        }
                         disabled={item.quantity <= 1}
                       >
                         -
                       </button>
                       <span>{item.quantity}</span>
                       <button
-                        onClick={() => handleQuantityChange(item._id, item.quantity + 1)}
+                        onClick={() =>
+                          handleQuantityChange(item._id, item.quantity + 1)
+                        }
                       >
                         +
                       </button>
@@ -145,13 +155,18 @@ const CartDrawer = ({ isOpen, onClose, theme, isAuthenticated }) => {
               }}
               style={{
                 marginTop: "auto",
-                padding: "0.75rem",
+                padding: "1rem",
                 backgroundColor: "crimson",
                 color: "#fff",
                 border: "none",
                 borderRadius: "6px",
                 cursor: "pointer",
                 fontWeight: "bold",
+                width: "100%",
+                boxSizing: "border-box",
+                position: "sticky",
+                bottom: 0,
+                zIndex: 1,
               }}
             >
               Procedi all'acquisto
