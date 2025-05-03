@@ -70,11 +70,12 @@ function Shop({ theme, token, userRole, onNotify }) {
 
   return (
     <div style={{ padding: "2rem", position: "relative" }}>
+      {/* MODIFICA QUI */}
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          justifyContent: "flex-end",
+          marginBottom: "2rem", // spazio aggiunto
         }}
       >
         <button
@@ -93,11 +94,13 @@ function Shop({ theme, token, userRole, onNotify }) {
             fontSize: "1.4rem",
             cursor: "pointer",
             zIndex: 999,
+            marginRight: "1rem",
           }}
         >
           <FiShoppingCart />
         </button>
       </div>
+      {/* FINE MODIFICA */}
 
       {isAdmin && showForm && (
         <div style={{ marginBottom: "2rem" }}>
